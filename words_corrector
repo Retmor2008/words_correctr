@@ -1,0 +1,141 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+int relevance(const vector <char> mini_words , const string main_word)
+{
+	int counter = 0;
+	vector <char> main_mini_word;
+	for (const char& num : main_word)
+	{
+		cout << num << endl;
+		main_mini_word.push_back(num);
+	}
+	for (int i = 0; i < main_mini_word.size(); ++i)
+	{
+		if (mini_words.size() == main_mini_word.size()  && mini_words[i] == main_mini_word[i])
+		{
+			++counter;
+		}
+	}
+	main_mini_word.clear();
+	return counter;
+}
+
+vector <char> sort_one_word(const string word)//allrigth
+{
+	vector <char> mini_words;
+	for (const char& num:word)
+	{
+		mini_words.push_back(num);
+	}
+	for (char f:mini_words)
+	{
+		cout << f << endl;
+	}
+	return mini_words;
+}
+
+string sort_text_if_mass(const vector <string> base_of_program , const string sort_word_form_user)
+{
+	int max = 0;
+	vector <int> number;
+	string correct_mass;
+	vector <int> counter;
+	vector <char> mini_words;
+	for (string word:base_of_program)
+	{
+		cout << word << ":"s << endl;
+		mini_words = sort_one_word(word);
+		counter.push_back(relevance(mini_words , sort_word_form_user));
+		mini_words.clear();
+	}
+	for (int i = 0; i < counter.size(); ++i)
+	{
+		if (max < counter[i])
+		{
+			max = counter[i];
+			number.clear();
+			number.push_back(i);
+		}
+		else if (max == counter[i])
+		{
+			number.push_back(i);
+		}
+	}
+	cout << "-------------------------------------------------------------" << endl;
+	for (int y:counter)
+	{
+		cout << y << endl;
+	}
+	for (int i = 0; i < number.size(); ++i)
+	{
+		correct_mass += base_of_program[number[i]];
+		cout << correct_mass  << " "s;
+		correct_mass.clear();
+	}
+	return correct_mass;
+}
+
+void corector(vector <string> sort_text_form_user)
+{
+	vector <string> mass_words_dont_sort = { "yes"s , "ok"s , "hello"s , "allright"s , "no"s , "adult"s , "girl"s , "baby"s , "child"s , "boy"s , "birth"s , "age"s , "human"s , "kid"s , "life"s , "man"s , "name"s ,
+		"people"s , "person"s , "surname"s , "woman"s , "youth"s , "teenager"s , "he"s , "her"s , "him"s , "his"s , "i"s , "it"s , "my"s , "our"s , "she"s , "their"s , "them"s , "they"s , "we"s , "arm"s ,
+		"back"s , "belly"s , "blood"s , "bone"s , "brain"s , "cheek"s , "chest"s , "chin"s , "ear"s , "eye"s , "elbow"s , "face"s , "finger"s , "foot"s , "hand"s , "jaw"s , "lips"s , "knee"s , "leg"s , "kidney"s ,
+		"hip"s , "liver"s , "lung"s , "neck"s , "mouth"s , "nail"s , "never"s , "muscle"s , "nose"s , "palm"s , "rib"s , "skeleton"s , "skin"s , "skull"s , "toe"s , "tongue"s , "throat"s , "tooth"s , "wrist"s , 
+		"forehead"s , "hell"s , "wavy"s , "weight"s , "ugly"s , "tall"s , "thin"s , "active"s , "brave"s , "calm"s , "creative"s , "fair"s , "excited"s , "emotional"s , "genius"s , "glad"s , "gentle"s , "happy"s , 
+		"lazy"s , "moody"s , "nervous"s , "open"s , "patient"s , "proud"s , "quiet"s , "rude"s , "sad"s , "romantic"s , "shy"s , "upset"s , "tough"s , "stupid"s , "talented"s , "wise"s , "witty"s , "aunt"s , 
+		"adoption"s , "boyfrend"s , "brother"s , "bride"s , "cousin"s , "daughter"s , "divorce"s , "family"s , "father"s , "friend"s , "girlfrend"s , "godfather"s , "godmother"s , "lover"s , "hope"s , "good"s , "one"s ,
+		"thwo"s , "three"s , "four"s , "five"s , "six"s , "seven"s , "eight"s , "nine"s , "ten"s , "zero"s , "eleven"s, "you"s , "hy"s , "help"s , "first"s , "second"s , "sock"s , "all"s , "add"s};
+	vector <string> sort_mass_words;
+	string one_word;
+	int counter = 0;
+	for (int i = 0; i < sort_text_form_user.size(); ++i)
+	{
+		for (int y = 0; y < mass_words_dont_sort.size(); ++y)
+		{
+			if (sort_text_form_user[i] != mass_words_dont_sort[y])
+			{
+				++counter;
+				if (counter == mass_words_dont_sort.size())
+				{
+					one_word += sort_text_form_user[i];
+					sort_text_form_user[i] = sort_text_if_mass(mass_words_dont_sort , one_word);
+				}
+			}
+		}
+	}
+}
+
+vector <string> sort_text(const string text)
+{
+	vector <string> sort_words;
+	string one_word;
+	for (const char& word : text)
+	{
+		if (word != ' ')
+		{
+			one_word += word;
+		}
+		else if (word == ' ' || !one_word.empty())
+		{
+			sort_words.push_back(one_word);
+			one_word.clear();
+		}
+	}
+	sort_words.push_back(one_word);
+	one_word.clear();
+	return sort_words;
+}
+
+int main()
+{
+	string text_from_user_dont_sort;
+	vector <string> sort_text_from_user;
+	getline(cin , text_from_user_dont_sort);
+	sort_text_from_user = sort_text(text_from_user_dont_sort);
+	corector(sort_text_from_user);
+	return 0;
+}
